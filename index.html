@@ -61,7 +61,7 @@ function render(){
       <div class="name">${esc(p.nom)}</div>
       <div class="place"><span class="pin">●</span>${esc(p.quartier)}</div>
       <div class="city-pill">${esc(city)}</div></div>
-      <div class="actions">
+      <div class="actions"><button type="button" class="btn-map" onclick="openDirections(item.nom,item.quartier,item.ville)">📍 Itinéraire</button>
       <a aria-label="Appeler ${esc(p.nom)}" class="call" href="tel:+229${tel}"><span>☎</span> ${esc(phone)}</a>
       <a aria-label="WhatsApp ${esc(p.nom)}" class="wa" href="https://wa.me/229${wa}" rel="noopener" target="_blank"><span>◔</span> WhatsApp</a>
       </div><div class="arrow">›</div></article>`;
@@ -100,4 +100,12 @@ async function loadPoints(){
 input.addEventListener('input',render);
 filters.forEach(b=>b.addEventListener('click',()=>{filters.forEach(x=>x.classList.remove('active'));b.classList.add('active');zone=b.dataset.filter;render();}));
 typeFilters.forEach(b=>b.addEventListener('click',()=>{typeFilters.forEach(x=>x.classList.remove('active'));b.classList.add('active');type=b.dataset.type;render();}));
-loadSiteSettings();loadPoints();</script></body></html>
+loadSiteSettings();loadPoints();</script>
+<script>
+function openDirections(name, quartier, ville){
+  const destination = encodeURIComponent([name, quartier, ville, "Bénin"].filter(Boolean).join(", "));
+  window.open("https://www.google.com/maps/dir/?api=1&destination="+destination, "_blank");
+}
+</script>
+
+</body></html>
