@@ -1,11 +1,10 @@
-# SOBECO
+SOBECO — version gestion complète du contenu
 
-Site public + espace administration.
+Cette version conserve les fonctions précédentes et ajoute :
+- Gestion des textes publics depuis l'administration
+- Gestion des principaux textes de l'administration
+- Thèmes et couleurs (normal, Noël, Nouvel An, Saint-Valentin, Pâques, Fête nationale du Bénin, personnalisé)
+- Correction responsive du slogan pour éviter les coupures sur téléphone
+- Carousel existant avec images affichées entièrement (object-fit: contain)
 
-Cette version conserve le site public et les fonctions existantes, et ajoute un tableau de bord administrateur dynamique.
-
-- Public : index.html
-- Administration : /admin
-- Données : Supabase
-- Les statistiques du tableau de bord sont calculées automatiquement depuis les points de vente.
-- Les doublons éventuels de la base ne sont pas supprimés : le tableau de bord déduplique uniquement l'affichage des statistiques.
+Avant déploiement : remplacer les fichiers actuels par index.html, admin.html et vercel.json.
