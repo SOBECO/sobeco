@@ -15,7 +15,7 @@
 
 <div class="admin-shell hidden" id="app">
   <aside class="sidebar">
-    <div class="side-brand"><div class="side-logo">◒</div><div><strong>SOBECO</strong><small>Votre santé, notre priorité</small></div></div>
+    <div class="side-brand"><div class="side-logo">◒</div><div><strong>SOBECO</strong><small>SOBECO l’expertise au cœur de la beauté</small></div></div>
     <nav class="side-nav">
       <a class="side-link active" href="#dashboardPanel"><span>⌂</span>Tableau de bord</a>
       <a class="side-link" href="#pointsPanel"><span>▣</span>Points de vente</a>
@@ -43,14 +43,14 @@
         <section class="dash-card"><h2>● &nbsp;Répartition par ville</h2><div id="cityBars" class="city-bars"></div></section>
       </div>
       <section class="dash-card recent-card"><div class="recent-head"><h2>✚ &nbsp;Derniers points de vente ajoutés</h2><a href="#pointsPanel">Voir tous les points de vente →</a></div><div class="recent-table-wrap"><table class="recent-table"><thead><tr><th>Nom</th><th>Type</th><th>Ville</th><th>Quartier</th><th>Téléphone</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="recentTbody"></tbody></table></div></section>
-      <section class="dash-footer"><div class="dash-footer-logo">◒</div><div><h3>SOBECO, toujours proche de vous</h3><p>Nos pharmacies et supermarchés partenaires vous accompagnent au quotidien pour une meilleure santé et un meilleur bien-être.</p></div><div class="footer-feature">✓ <span>Produits de qualité<br>et certifiés</span></div><div class="footer-feature">● <span>Un réseau de confiance<br>sur tout le territoire</span></div><div class="footer-feature">♥ <span>Votre santé<br>notre priorité</span></div></section>
+      <section class="dash-footer"><div class="dash-footer-logo">◒</div><div><h3>SOBECO, toujours proche de vous</h3><p>Nos pharmacies et supermarchés partenaires vous accompagnent au quotidien pour une meilleure santé et un meilleur bien-être.</p></div><div class="footer-feature">✓ <span>Produits de qualité<br>et certifiés</span></div><div class="footer-feature">● <span>Un réseau de confiance<br>sur tout le territoire</span></div><div class="footer-feature">✦ <span>SOBECO l’expertise<br>au cœur de la beauté</span></div></section>
     </div>
     <div class="legacy-content">
       <div class="panel legacy-head"><div class="toolbar"><div><h1 class="h">Gestion des points de vente</h1><div class="muted" id="who"></div></div><button class="secondary" id="logoutBtn">Se déconnecter</button></div></div>
       <div class="panel"><div class="toolbar"><div><h1 class="h">Gestion des points de vente</h1><div class="muted" id="who"></div></div><button class="secondary" id="logoutBtn">Se déconnecter</button></div></div>
 
 <section class="panel" id="appearancePanel"><div class="toolbar"><div><h2 class="h">🎨 Apparence du site</h2><div class="muted">Modifie les textes et les couleurs visibles sur la page publique.</div></div></div>
-<div class="row"><div><label for="siteTitle">Grand titre</label><input id="siteTitle" placeholder="Où trouver les produits SOBECO ?"></div><div><label for="tagline">Slogan</label><input id="tagline" placeholder="SOBECO, plus proche de vous !"></div></div>
+<div class="row"><div><label for="siteTitle">Grand titre</label><input id="siteTitle" placeholder="Où trouver les produits SOBECO ?"></div><div><label for="tagline">Slogan</label><input id="tagline" placeholder="SOBECO l’expertise au cœur de la beauté"></div></div>
 <label for="siteSubtitle">Texte sous le titre</label><input id="siteSubtitle" placeholder="Trouvez facilement un point de vente SOBECO près de vous.">
 <div class="row"><div><label for="primaryColor">Couleur principale</label><input id="primaryColor" type="text" placeholder="#087a3d"></div><div><label for="secondaryColor">Couleur foncée</label><input id="secondaryColor" type="text" placeholder="#07572d"></div></div>
 <div class="row"><div><label for="footerTitle">Titre du pied de page</label><input id="footerTitle" placeholder="SOBECO, plus proche de vous !"></div><div><label for="footerText">Texte du pied de page</label><input id="footerText" placeholder="Des produits de qualité, disponibles au Bénin."></div></div>
@@ -107,6 +107,7 @@ async function getCurrentUser(){try{if(!accessToken)return null;const r=await fe
 async function loadAdmins(){clearMsg($('adminMsg'));try{const data=await api('/rest/v1/admins?select=user_id&order=user_id.asc');const list=Array.isArray(data)?data:[];const me=await getCurrentUser();const tb=$('adminsTbody');if(!tb)return;tb.innerHTML=list.map(r=>{const mine=me&&r.user_id===me.id;return `<tr><td><span class="admin-me">${mine?'● Mon compte':'● Administrateur'}</span></td><td><span class="admin-id">${esc(r.user_id)}</span></td><td><span class="admin-list-pill">Actif</span></td><td><div class="admin-row-actions">${mine?'<button class="secondary" disabled>Compte actuel</button>':`<button class="danger" onclick="removeAdmin('${r.user_id}')">Retirer</button>`}</div></td></tr>`}).join('')||'<tr><td colspan="4" class="muted">Aucun administrateur trouvé.</td></tr>';}catch(e){msg($('adminMsg'),'Impossible de charger les administrateurs.\n'+friendly(e),true)}}
 async function addAdmin(){clearMsg($('adminMsg'));const id=$('newAdminUserId').value.trim();if(!/^[0-9a-fA-F-]{36}$/.test(id)){msg($('adminMsg'),'Entre un identifiant utilisateur (UUID) valide.',true);return}try{await api('/rest/v1/admins',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({user_id:id})});$('newAdminUserId').value='';msg($('adminMsg'),'✓ Administrateur ajouté.');await loadAdmins();}catch(e){msg($('adminMsg'),'Impossible d’ajouter cet administrateur.\nVérifie que son compte existe déjà et que tu utilises son UUID.\n'+friendly(e),true)}}
 window.removeAdmin=async id=>{const me=await getCurrentUser();if(me&&id===me.id){alert('Ton propre compte ne peut pas être retiré ici.');return}if(!confirm('Retirer cet administrateur ? Il ne pourra plus accéder à l’espace admin.'))return;try{await api('/rest/v1/admins?user_id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{'Prefer':'return=minimal'}});await loadAdmins();msg($('adminMsg'),'✓ Administrateur retiré.');}catch(e){msg($('adminMsg'),'Impossible de retirer cet administrateur.\n'+friendly(e),true)}};
+const DEFAULT_HERO_IMAGES=['hero1.png','hero2.png','hero3.png','hero4.png','hero5.jpg'];
 async function loadSiteImages(){
   clearMsg($('imageMsg'));
   try{
@@ -114,15 +115,21 @@ async function loadSiteImages(){
     const r=Array.isArray(rows)?rows[0]:null;
     window.heroImagesRow=r||null;
     let imgs=Array.isArray(r?.hero_images)?r.hero_images.filter(Boolean):[];
+    // Première ouverture de l’administration : enregistrer les 5 images intégrées
+    // afin qu’elles deviennent réellement gérables depuis l’espace privé.
+    if(!imgs.length){
+      imgs=[...DEFAULT_HERO_IMAGES];
+      await saveHeroImages(imgs,r);
+    }
     renderHeroImagesAdmin(imgs);
   }catch(e){msg($('imageMsg'),'Impossible de charger les images.\n'+friendly(e),true)}
 }
 function renderHeroImagesAdmin(images){
   const box=$('heroImagesList'); if(!box)return; box.innerHTML='';
-  if(!images.length){box.innerHTML='<div class="muted" style="padding:18px;border:1px dashed #cfe0d5;border-radius:14px">Aucune image ajoutée depuis l’administration pour le moment. Les 5 images de test intégrées au nouveau site restent visibles publiquement.</div>';return;}
+  if(!images.length){box.innerHTML='<div class="muted" style="padding:18px;border:1px dashed #cfe0d5;border-radius:14px">Aucune image dans le carrousel.</div>';return;}
   images.forEach((url,i)=>{
-    const card=document.createElement('div'); card.style='display:flex;gap:12px;align-items:center;padding:10px;border:1px solid #dcebe0;border-radius:14px;background:#fff';
-    card.innerHTML=`<img src="${escapeHtml(url)}" alt="Image ${i+1}" style="width:110px;height:78px;object-fit:contain;background:#f7faf8;border-radius:10px;border:1px solid #edf2ee"><div style="flex:1;min-width:0"><strong>Image ${i+1}</strong><div class="muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(url)}</div></div><div class="actions" style="margin:0"><button class="secondary" onclick="moveHeroImage(${i},-1)" ${i===0?'disabled':''}>↑</button><button class="secondary" onclick="moveHeroImage(${i},1)" ${i===images.length-1?'disabled':''}>↓</button><button class="secondary" onclick="deleteHeroImage(${i})">🗑️</button></div>`;
+    const card=document.createElement('div'); card.style='display:flex;gap:12px;align-items:center;padding:10px;border:1px solid #dcebe0;border-radius:14px;background:#fff;flex-wrap:wrap';
+    card.innerHTML=`<img src="${escapeHtml(url)}" alt="Image ${i+1}" style="width:110px;height:78px;object-fit:contain;background:#f7faf8;border-radius:10px;border:1px solid #edf2ee"><div style="flex:1;min-width:180px"><strong>Image ${i+1}</strong><div class="muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(url)}</div></div><div class="actions" style="margin:0"><button class="secondary" onclick="replaceHeroImage(${i})">🔄 Remplacer</button><button class="secondary" onclick="moveHeroImage(${i},-1)" ${i===0?'disabled':''}>↑</button><button class="secondary" onclick="moveHeroImage(${i},1)" ${i===images.length-1?'disabled':''}>↓</button><button class="danger" onclick="deleteHeroImage(${i})">🗑️</button></div>`;
     box.appendChild(card);
   });
 }
@@ -154,6 +161,25 @@ async function uploadSiteImage(){
 async function moveHeroImage(index,delta){
   try{const cur=await getHeroImages();const j=index+delta;if(j<0||j>=cur.images.length)return;[cur.images[index],cur.images[j]]=[cur.images[j],cur.images[index]];await saveHeroImages(cur.images,cur.row);await loadSiteImages();msg($('imageMsg'),'✓ Ordre des images enregistré.')}catch(e){msg($('imageMsg'),'Impossible de modifier l’ordre.\n'+friendly(e),true)}
 }
+async function replaceHeroImage(index){
+  const input=document.createElement('input'); input.type='file'; input.accept='image/jpeg,image/png,image/webp,image/*';
+  input.onchange=async()=>{
+    const f=input.files[0]; if(!f)return;
+    if(!f.type.startsWith('image/')){msg($('imageMsg'),'Le fichier choisi n’est pas une image.',true);return}
+    if(f.size>5*1024*1024){msg($('imageMsg'),'L’image doit faire 5 Mo maximum.',true);return}
+    try{
+      const ext=(f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+      const path='hero-'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
+      const r=await fetch(SUPABASE_URL+'/storage/v1/object/site-images/'+encodeURIComponent(path),{method:'POST',headers:headers({'Content-Type':f.type||'application/octet-stream'}),body:f});
+      let d=null;try{d=await r.json()}catch(_){} if(!r.ok)throw new Error(d?.message||d?.error||('HTTP '+r.status));
+      const url=SUPABASE_URL+'/storage/v1/object/public/site-images/'+encodeURIComponent(path)+'?v='+Date.now();
+      const cur=await getHeroImages(); if(index<0||index>=cur.images.length)throw new Error('Image introuvable.');
+      const old=cur.images[index]; cur.images[index]=url; await saveHeroImages(cur.images,cur.row);
+      try{const m=old.match(/\/storage\/v1\/object\/public\/site-images\/([^?]+)/);if(m)await fetch(SUPABASE_URL+'/storage/v1/object/site-images/'+m[1],{method:'DELETE',headers:headers({})});}catch(_){}
+      await loadSiteImages(); msg($('imageMsg'),'✓ Image remplacée.');
+    }catch(e){msg($('imageMsg'),'Impossible de remplacer l’image.\n'+friendly(e),true)}
+  }; input.click();
+}
 async function deleteHeroImage(index){
   if(!confirm('Supprimer cette image du carrousel ?'))return;
   try{const cur=await getHeroImages();const url=cur.images[index];cur.images.splice(index,1);await saveHeroImages(cur.images,cur.row);
@@ -163,7 +189,7 @@ async function deleteHeroImage(index){
 
 async function showApp(user){$('loginPanel').classList.add('hidden');$('recoveryPanel').classList.add('hidden');document.getElementById('app').classList.remove('hidden');$('who').textContent='Connecté : '+(user?.email||'');await Promise.all([load(),loadAppearance(),loadSiteImages(),loadAdmins()]);renderDashboard();}
 async function load(){try{const data=await api('/rest/v1/points_vente?select=*&order=type.asc,nom.asc');rows=Array.isArray(data)?data:[];renderDashboard();$('tbody').innerHTML=rows.map(r=>`<tr><td><span class="pill ${r.type==='supermarche'?'super':''}">${r.type==='pharmacie'?'Pharmacie':'Supermarché'}</span></td><td>${esc(r.nom)}</td><td>${esc(r.quartier)}</td><td>${esc(r.ville)}</td><td>${esc(r.telephone)}</td><td>${r.actif?'Oui':'Non'}</td><td><div class="actions"><button class="secondary" onclick="editRow('${r.id}')">Modifier</button><button class="secondary" onclick="toggleRow('${r.id}',${!r.actif})">${r.actif?'Désactiver':'Activer'}</button><button class="danger" onclick="deleteRow('${r.id}')">Supprimer</button></div></td></tr>`).join('')}catch(e){msg($('formMsg'),'Erreur de lecture.\n'+friendly(e),true)}}
-async function loadAppearance(){try{const data=await api('/rest/v1/site_settings?select=site_title,site_subtitle,tagline,primary_color,secondary_color,footer_title,footer_text&limit=1');const r=Array.isArray(data)?data[0]:null;if(!r)return;$('siteTitle').value=r.site_title||'';$('siteSubtitle').value=r.site_subtitle||'';$('tagline').value=r.tagline||'';$('primaryColor').value=r.primary_color||'#087a3d';$('secondaryColor').value=r.secondary_color||'#07572d';$('footerTitle').value=r.footer_title||'';$('footerText').value=r.footer_text||'';}catch(e){msg($('appearanceMsg'),'Impossible de charger les réglages.\n'+friendly(e),true)}}
+async function loadAppearance(){try{const data=await api('/rest/v1/site_settings?select=site_title,site_subtitle,tagline,primary_color,secondary_color,footer_title,footer_text&limit=1');const r=Array.isArray(data)?data[0]:null;if(!r)return;$('siteTitle').value=r.site_title||'';$('siteSubtitle').value=r.site_subtitle||'';$('tagline').value=r.tagline||'SOBECO l’expertise au cœur de la beauté';$('primaryColor').value=r.primary_color||'#087a3d';$('secondaryColor').value=r.secondary_color||'#07572d';$('footerTitle').value=r.footer_title||'';$('footerText').value=r.footer_text||'';}catch(e){msg($('appearanceMsg'),'Impossible de charger les réglages.\n'+friendly(e),true)}}
 async function saveAppearance(){clearMsg($('appearanceMsg'));const payload={site_title:$('siteTitle').value.trim(),site_subtitle:$('siteSubtitle').value.trim(),tagline:$('tagline').value.trim(),primary_color:$('primaryColor').value.trim(),secondary_color:$('secondaryColor').value.trim(),footer_title:$('footerTitle').value.trim(),footer_text:$('footerText').value.trim()};if(!payload.site_title||!payload.site_subtitle){msg($('appearanceMsg'),'Le grand titre et le texte sous le titre sont obligatoires.',true);return}try{const existing=await api('/rest/v1/site_settings?select=id&limit=1');if(Array.isArray(existing)&&existing.length){await api('/rest/v1/site_settings?id=eq.'+encodeURIComponent(existing[0].id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify(payload)});}else{await api('/rest/v1/site_settings',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(payload)});}msg($('appearanceMsg'),'✓ Apparence enregistrée. Recharge la page publique pour voir les changements.');}catch(e){msg($('appearanceMsg'),'Erreur d’enregistrement.\n'+friendly(e),true)}}
 function resetForm(){editingId=null;$('formTitle').textContent='Ajouter un point de vente';$('saveBtn').textContent='Ajouter';$('cancelBtn').classList.add('hidden');['nom','quartier','ville','telephone','whatsapp'].forEach(id=>$(id).value='');$('type').value='pharmacie'}
 window.editRow=id=>{const r=rows.find(x=>x.id===id);if(!r)return;editingId=id;$('formTitle').textContent='Modifier un point de vente';$('saveBtn').textContent='Enregistrer';$('cancelBtn').classList.remove('hidden');$('type').value=r.type;$('nom').value=r.nom||'';$('quartier').value=r.quartier||'';$('ville').value=r.ville||'';$('telephone').value=r.telephone||'';$('whatsapp').value=r.whatsapp||r.telephone||'';scrollTo({top:250,behavior:'smooth'})};
