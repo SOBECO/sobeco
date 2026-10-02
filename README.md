@@ -11,3 +11,10 @@ Avant déploiement : remplacer les fichiers actuels par index.html, admin.html e
 
 ## V4 — envoi fiable des demandes d'intégration
 Exécuter `supabase_demandes_integration_v4.sql` dans Supabase. Le formulaire enregistre désormais la demande en premier via RPC; l'upload photo est ensuite optionnel, donc une photo qui échoue ne bloque plus l'envoi.
+
+
+### V5 — Demandes d'intégration
+- Suppression de la photo du formulaire d'intégration pour simplifier et fiabiliser l'envoi.
+- Enregistrement direct dans `point_vente_demandes` via Supabase.
+- Message de succès visible avant fermeture du formulaire.
+- Les images existantes du site sont conservées sans modification.
