@@ -16,6 +16,30 @@ CREATE TABLE IF NOT EXISTS public.point_vente_demandes (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Si la table existait déjà avec une ancienne contrainte, on la corrige
+-- pour autoriser aussi le type « autre ».
+DO $$
+DECLARE
+  c record;
+BEGIN
+  FOR c IN
+    SELECT conname
+    FROM pg_constraint
+    WHERE conrelid = 'public.point_vente_demandes'::regclass
+      AND contype = 'c'
+      AND pg_get_constraintdef(oid) ILIKE '%type%'
+  LOOP
+    EXECUTE format(
+      'ALTER TABLE public.point_vente_demandes DROP CONSTRAINT IF EXISTS %I',
+      c.conname
+    );
+  END LOOP;
+END $$;
+
+ALTER TABLE public.point_vente_demandes
+  ADD CONSTRAINT point_vente_demandes_type_check
+  CHECK (type IN ('pharmacie','supermarche','boutique_cosmetiques','autre'));
+
 ALTER TABLE public.point_vente_demandes ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Public can submit integration requests" ON public.point_vente_demandes;
