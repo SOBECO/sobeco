@@ -18,3 +18,10 @@ Exécuter `supabase_demandes_integration_v4.sql` dans Supabase. Le formulaire en
 - Enregistrement direct dans `point_vente_demandes` via Supabase.
 - Message de succès visible avant fermeture du formulaire.
 - Les images existantes du site sont conservées sans modification.
+
+
+## Correction V6
+- Correction du blocage du bouton d'envoi du formulaire d'intégration : le champ message standard obligatoire ne bloque plus la validation lorsqu'on choisit Demande d'intégration.
+- Le formulaire est en `novalidate` et la validation de la demande d'intégration est gérée par le script.
+- Ajout d'un déclenchement défensif du bouton d'envoi.
+- Aucune image existante n'a été modifiée.
